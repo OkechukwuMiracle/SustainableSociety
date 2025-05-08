@@ -110,7 +110,18 @@ export class MemStorage implements IStorage {
         { name: "Lagos - Ikeja", location: "Ikeja, Lagos", coordinates: "6.5955,3.3671" },
         { name: "Lagos - Lekki", location: "Lekki, Lagos", coordinates: "6.593047,3.363732" },
         { name: "Abuja - Central", location: "Central, Abuja", coordinates: "9.0765,7.3986" },
-        { name: "Port Harcourt", location: "Port Harcourt", coordinates: "4.8156,7.0498" }
+        { name: "Port Harcourt", location: "Port Harcourt", coordinates: "4.8156,7.0498" },
+        { name: "Kano Central", location: "Kano", coordinates: "12.0022,8.5920" },
+        { name: "Ibadan Main", location: "Ibadan, Oyo", coordinates: "7.3775,3.9470" },
+        { name: "Kaduna North", location: "Kaduna", coordinates: "10.5222,7.4383" },
+        { name: "Enugu City", location: "Enugu", coordinates: "6.4447,7.5486" },
+        { name: "Benin City", location: "Benin, Edo", coordinates: "6.3350,5.6037" },
+        { name: "Jos Central", location: "Jos, Plateau", coordinates: "9.8965,8.8583" },
+        { name: "Maiduguri Hub", location: "Maiduguri, Borno", coordinates: "11.8311,13.1508" },
+        { name: "Owerri Central", location: "Owerri, Imo", coordinates: "5.4891,7.0331" },
+        { name: "Warri Main", location: "Warri, Delta", coordinates: "5.5267,5.7530" },
+        { name: "Uyo Station", location: "Uyo, Akwa Ibom", coordinates: "5.0510,7.9249" },
+        { name: "Sokoto Central", location: "Sokoto", coordinates: "13.0479,5.2343" }
       ];
       
       // Create stores directly instead of using async method
@@ -137,7 +148,18 @@ export class MemStorage implements IStorage {
         { phone: "+2348001234567", storeId: 1 },
         { phone: "+2348012345678", storeId: 2 },
         { phone: "+2348023456789", storeId: 3 },
-        { phone: "+2348034567890", storeId: 4 }
+        { phone: "+2348034567890", storeId: 4 },
+        { phone: "+2348045678901", storeId: 5 },
+        { phone: "+2348056789012", storeId: 6 },
+        { phone: "+2348067890123", storeId: 7 },
+        { phone: "+2348078901234", storeId: 8 },
+        { phone: "+2348089012345", storeId: 9 },
+        { phone: "+2348090123456", storeId: 10 },
+        { phone: "+2348101234567", storeId: 11 },
+        { phone: "+2348112345678", storeId: 12 },
+        { phone: "+2348123456789", storeId: 13 },
+        { phone: "+2348134567890", storeId: 14 },
+        { phone: "+2348145678901", storeId: 15 }
       ];
       
       userData.forEach(userInfo => {
@@ -178,7 +200,7 @@ export class MemStorage implements IStorage {
       });
       
       // Initialize inventory for each store
-      for (let storeId = 1; storeId <= 4; storeId++) {
+      for (let storeId = 1; storeId <= 15; storeId++) {
         for (let productId = 1; productId <= 5; productId++) {
           const id = this.currentInventoryId++;
           const inventory: Inventory = { 
@@ -194,20 +216,79 @@ export class MemStorage implements IStorage {
         }
       }
       
-      // Initialize targets
-      for (let userId = 2; userId <= 5; userId++) {
+      // Initialize targets with varied performance
+      for (let userId = 2; userId <= 16; userId++) {
         const id = this.currentTargetId++;
+        const storeId = userId - 1;
+        
+        // Add some variety to the data for charts
+        const randomMultiplier = (0.5 + Math.random());
+        const randomAchievedPercent = Math.random();
+        
+        const engagementDailyTarget = Math.floor(50 * randomMultiplier);
+        const conversationDailyTarget = Math.floor(30 * randomMultiplier);
+        
+        // Some stores will have higher achievements, some lower
+        const engagementAchieved = Math.floor(engagementDailyTarget * randomAchievedPercent);
+        const conversationAchieved = Math.floor(conversationDailyTarget * randomAchievedPercent);
+        
         const target: Target = {
           id,
           userId,
-          storeId: userId - 1,
-          engagementDailyTarget: 50,
-          conversationDailyTarget: 30,
-          engagementAchieved: 0,
-          conversationAchieved: 0,
+          storeId,
+          engagementDailyTarget,
+          conversationDailyTarget,
+          engagementAchieved,
+          conversationAchieved,
           date: new Date()
         };
         this.targets.set(id, target);
+        
+        // Also create some attendance data for each user
+        const attendanceId = this.currentAttendanceId++;
+        
+        // Create random login times - some early, some on-time, some late
+        const hours = Math.floor(Math.random() * 4) + 6; // 6am to 9am
+        const minutes = Math.floor(Math.random() * 60);
+        
+        const today = new Date();
+        const loginTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+        
+        // 30% chance of already logged out
+        const isLoggedOut = Math.random() < 0.3;
+        let logoutTime = null;
+        let duration = null;
+        
+        if (isLoggedOut) {
+          // Work between 6-9 hours
+          const workHours = 6 + Math.floor(Math.random() * 3);
+          logoutTime = new Date(loginTime.getTime() + (workHours * 60 * 60 * 1000));
+          
+          // Calculate duration in minutes
+          duration = Math.floor((logoutTime.getTime() - loginTime.getTime()) / (60 * 1000));
+        }
+        
+        // Determine login status based on time
+        let loginStatus = 'late';
+        if (hours < 8) {
+          loginStatus = 'early';
+        } else if (hours === 8 && minutes <= 30) {
+          loginStatus = 'ontime';
+        }
+        
+        const attendance: Attendance = {
+          id: attendanceId,
+          userId,
+          storeId,
+          loginTime,
+          loginStatus,
+          logoutTime,
+          duration,
+          faceScanLogin: "data:image/jpeg;base64,/9j/...", // Placeholder base64 data
+          faceScanLogout: isLoggedOut ? "data:image/jpeg;base64,/9j/..." : null, // Placeholder base64 data
+        };
+        
+        this.attendance.set(attendanceId, attendance);
       }
     } catch (error) {
       console.error("Error initializing data:", error);
@@ -274,7 +355,13 @@ export class MemStorage implements IStorage {
   // Attendance methods
   async createAttendance(insertAttendance: InsertAttendance): Promise<Attendance> {
     const id = this.currentAttendanceId++;
-    const attendance: Attendance = { ...insertAttendance, id, logoutTime: null, duration: null };
+    const attendance: Attendance = { 
+      ...insertAttendance, 
+      id, 
+      logoutTime: null, 
+      duration: null,
+      faceScanLogout: null
+    };
     this.attendance.set(id, attendance);
     return attendance;
   }

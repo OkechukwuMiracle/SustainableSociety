@@ -28,6 +28,8 @@ export const attendance = pgTable("attendance", {
   loginStatus: text("login_status").notNull(), // early, ontime, late
   logoutTime: timestamp("logout_time"),
   duration: integer("duration"), // in minutes
+  faceScanLogin: text("face_scan_login").notNull(),
+  faceScanLogout: text("face_scan_logout"),
 });
 
 // Targets table
@@ -85,11 +87,13 @@ export const insertAttendanceSchema = createInsertSchema(attendance).pick({
   storeId: true,
   loginTime: true,
   loginStatus: true,
+  faceScanLogin: true,
 });
 
 export const updateAttendanceSchema = createInsertSchema(attendance).pick({
   logoutTime: true,
   duration: true,
+  faceScanLogout: true,
 });
 
 export const insertTargetSchema = createInsertSchema(targets).pick({

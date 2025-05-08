@@ -136,6 +136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         storeId: user.storeId,
         loginTime: now,
         loginStatus,
+        faceScanLogin: data.faceScan // Use the faceScan from the login request
       });
 
       // Set session data
@@ -252,6 +253,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateAttendance(latestAttendance.id, {
           logoutTime: now,
           duration: durationMinutes,
+          faceScanLogout: faceScan || null,
         });
       }
 
@@ -359,6 +361,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const stores = await storage.getStores();
       res.json(stores);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Add route to get all targets for admin
+  app.get('/api/admin/targets', requireAdmin, async (req, res) => {
+    try {
+      const stores = await storage.getStores();
+      const allTargets = [];
+      
+      // Get targets for each store
+      for (const store of stores) {
+        const storeTargets = await storage.getTargetsByStoreId(store.id);
+        allTargets.push(...storeTargets);
+      }
+      
+      res.json(allTargets);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
