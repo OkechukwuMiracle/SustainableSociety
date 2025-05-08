@@ -23,7 +23,7 @@ export default function Sidebar({ activeSection, setActiveSection }: SidebarProp
             href="#dashboard"
             className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
               activeSection === 'dashboard'
-                ? 'bg-primary bg-opacity-10 text-primary'
+                ? 'bg-primary bg-opacity-10 text-white'
                 : 'text-neutral-700 hover:bg-neutral-100'
             }`}
             onClick={(e) => {
@@ -40,7 +40,7 @@ export default function Sidebar({ activeSection, setActiveSection }: SidebarProp
             href="#inventory"
             className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
               activeSection === 'inventory'
-                ? 'bg-primary bg-opacity-10 text-primary'
+                ? 'bg-primary bg-opacity-10 text-white'
                 : 'text-neutral-700 hover:bg-neutral-100'
             }`}
             onClick={(e) => {
@@ -57,7 +57,7 @@ export default function Sidebar({ activeSection, setActiveSection }: SidebarProp
             href="#targets"
             className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
               activeSection === 'targets'
-                ? 'bg-primary bg-opacity-10 text-primary'
+                ? 'bg-primary bg-opacity-10 text-white'
                 : 'text-neutral-700 hover:bg-neutral-100'
             }`}
             onClick={(e) => {
@@ -74,7 +74,7 @@ export default function Sidebar({ activeSection, setActiveSection }: SidebarProp
             href="#attendance"
             className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
               activeSection === 'attendance'
-                ? 'bg-primary bg-opacity-10 text-primary'
+                ? 'bg-primary bg-opacity-10 text-white'
                 : 'text-neutral-700 hover:bg-neutral-100'
             }`}
             onClick={(e) => {
