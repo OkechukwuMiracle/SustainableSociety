@@ -104,70 +104,113 @@ export class MemStorage implements IStorage {
   }
 
   private initializeData() {
-    // Create sample stores
-    const stores = [
-      { name: "Lagos - Ikeja", location: "Ikeja, Lagos", coordinates: "6.5955,3.3671" },
-      { name: "Lagos - Lekki", location: "Lekki, Lagos", coordinates: "6.4698,3.5852" },
-      { name: "Abuja - Central", location: "Central, Abuja", coordinates: "9.0765,7.3986" },
-      { name: "Port Harcourt", location: "Port Harcourt", coordinates: "4.8156,7.0498" }
-    ];
-    
-    stores.forEach(store => this.createStore(store));
-    
-    // Create admin user
-    this.createUser({
-      phone: "+2348000000000",
-      storeId: 1,
-      isAdmin: true,
-      password: "admin123"
-    });
-    
-    // Create regular users
-    const users = [
-      { phone: "+2348001234567", storeId: 1 },
-      { phone: "+2348012345678", storeId: 2 },
-      { phone: "+2348023456789", storeId: 3 },
-      { phone: "+2348034567890", storeId: 4 }
-    ];
-    
-    users.forEach(user => this.createUser({ ...user, isAdmin: false }));
-    
-    // Create brands
-    const brands = ["Dettol", "Harpic", "Mortein", "Air Wick"];
-    const brandIds = brands.map(brand => this.createBrand({ name: brand }).id);
-    
-    // Create products
-    const products = [
-      { name: "Dettol Original Soap 100g", brandId: brandIds[0] },
-      { name: "Dettol Cool Soap 100g", brandId: brandIds[0] },
-      { name: "Harpic Power Plus 500ml", brandId: brandIds[1] },
-      { name: "Mortein Instant Power Spray 300ml", brandId: brandIds[2] },
-      { name: "Air Wick Freshmatic Refill Lavender", brandId: brandIds[3] }
-    ];
-    
-    products.forEach(product => this.createProduct(product));
-    
-    // Initialize inventory for each store
-    for (let storeId = 1; storeId <= 4; storeId++) {
-      for (let productId = 1; productId <= 5; productId++) {
-        this.createInventory({
-          storeId,
-          productId,
-          openingStock: Math.floor(Math.random() * 100) + 50,
-          date: new Date()
-        });
-      }
-    }
-    
-    // Initialize targets
-    for (let userId = 2; userId <= 5; userId++) {
-      this.createTarget({
-        userId,
-        storeId: userId - 1,
-        engagementDailyTarget: 50,
-        conversationDailyTarget: 30,
-        date: new Date()
+    try {
+      // Create sample stores synchronously to avoid promises
+      const storeData = [
+        { name: "Lagos - Ikeja", location: "Ikeja, Lagos", coordinates: "6.5955,3.3671" },
+        { name: "Lagos - Lekki", location: "Lekki, Lagos", coordinates: "6.593047,3.363732" },
+        { name: "Abuja - Central", location: "Central, Abuja", coordinates: "9.0765,7.3986" },
+        { name: "Port Harcourt", location: "Port Harcourt", coordinates: "4.8156,7.0498" }
+      ];
+      
+      // Create stores directly instead of using async method
+      storeData.forEach((storeInfo, index) => {
+        const id = index + 1;
+        const store: Store = { ...storeInfo, id };
+        this.stores.set(id, store);
+        this.currentStoreId = id + 1;
       });
+      
+      // Create admin user directly
+      const adminId = this.currentUserId++;
+      const adminUser: User = {
+        id: adminId,
+        phone: "+2348000000000",
+        storeId: 1,
+        isAdmin: true,
+        password: "admin123"
+      };
+      this.users.set(adminId, adminUser);
+      
+      // Create regular users directly
+      const userData = [
+        { phone: "+2348001234567", storeId: 1 },
+        { phone: "+2348012345678", storeId: 2 },
+        { phone: "+2348023456789", storeId: 3 },
+        { phone: "+2348034567890", storeId: 4 }
+      ];
+      
+      userData.forEach(userInfo => {
+        const id = this.currentUserId++;
+        const user: User = { 
+          ...userInfo, 
+          id, 
+          isAdmin: false,
+          password: null 
+        };
+        this.users.set(id, user);
+      });
+      
+      // Create brands directly
+      const brandNames = ["Dettol", "Harpic", "Mortein", "Air Wick"];
+      const brandIds: number[] = [];
+      
+      brandNames.forEach(name => {
+        const id = this.currentBrandId++;
+        const brand: Brand = { name, id };
+        this.brands.set(id, brand);
+        brandIds.push(id);
+      });
+      
+      // Create products directly
+      const productData = [
+        { name: "Dettol Original Soap 100g", brandId: brandIds[0] },
+        { name: "Dettol Cool Soap 100g", brandId: brandIds[0] },
+        { name: "Harpic Power Plus 500ml", brandId: brandIds[1] },
+        { name: "Mortein Instant Power Spray 300ml", brandId: brandIds[2] },
+        { name: "Air Wick Freshmatic Refill Lavender", brandId: brandIds[3] }
+      ];
+      
+      productData.forEach(productInfo => {
+        const id = this.currentProductId++;
+        const product: Product = { ...productInfo, id };
+        this.products.set(id, product);
+      });
+      
+      // Initialize inventory for each store
+      for (let storeId = 1; storeId <= 4; storeId++) {
+        for (let productId = 1; productId <= 5; productId++) {
+          const id = this.currentInventoryId++;
+          const inventory: Inventory = { 
+            id,
+            storeId,
+            productId,
+            openingStock: Math.floor(Math.random() * 100) + 50,
+            date: new Date(),
+            closingStock: null,
+            unitsSold: null
+          };
+          this.inventory.set(id, inventory);
+        }
+      }
+      
+      // Initialize targets
+      for (let userId = 2; userId <= 5; userId++) {
+        const id = this.currentTargetId++;
+        const target: Target = {
+          id,
+          userId,
+          storeId: userId - 1,
+          engagementDailyTarget: 50,
+          conversationDailyTarget: 30,
+          engagementAchieved: 0,
+          conversationAchieved: 0,
+          date: new Date()
+        };
+        this.targets.set(id, target);
+      }
+    } catch (error) {
+      console.error("Error initializing data:", error);
     }
   }
 
@@ -184,7 +227,12 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id,
+      isAdmin: insertUser.isAdmin || false,  // Ensure isAdmin is always defined
+      password: insertUser.password || null  // Ensure password is always defined
+    };
     this.users.set(id, user);
     return user;
   }
@@ -394,23 +442,41 @@ export class MemStorage implements IStorage {
       (i) => i.storeId === storeId
     );
     
-    return Promise.all(
-      inventoryItems.map(async (i) => {
-        const product = await this.products.get(i.productId);
-        if (!product) throw new Error(`Product with ID ${i.productId} not found`);
+    const result = [];
+    
+    for (const item of inventoryItems) {
+      try {
+        const product = this.products.get(item.productId);
+        if (!product) {
+          console.error(`Product with ID ${item.productId} not found`);
+          continue;
+        }
         
-        const brand = await this.brands.get(product.brandId);
-        if (!brand) throw new Error(`Brand with ID ${product.brandId} not found`);
+        // Ensure brandId exists before trying to access the brand
+        if (product.brandId === undefined) {
+          console.error(`Product with ID ${item.productId} does not have a brandId`);
+          continue;
+        }
         
-        return {
-          ...i,
+        const brand = this.brands.get(product.brandId);
+        if (!brand) {
+          console.error(`Brand with ID ${product.brandId} not found`);
+          continue;
+        }
+        
+        result.push({
+          ...item,
           product: {
             ...product,
             brand
           }
-        };
-      })
-    );
+        });
+      } catch (error) {
+        console.error(`Error processing inventory item:`, error);
+      }
+    }
+    
+    return result;
   }
 
   async getInventoryByProductId(productId: number): Promise<Inventory[]> {
@@ -423,12 +489,20 @@ export class MemStorage implements IStorage {
     const store = await this.getStore(storeId);
     if (!store) return undefined;
     
-    const inventory = await this.getInventoryByStoreId(storeId);
-    
-    return {
-      ...store,
-      inventory
-    };
+    try {
+      const inventory = await this.getInventoryByStoreId(storeId);
+      
+      return {
+        ...store,
+        inventory
+      } as StoreWithProducts;
+    } catch (error) {
+      console.error("Error getting store inventory:", error);
+      return {
+        ...store,
+        inventory: []
+      } as StoreWithProducts;
+    }
   }
 }
 

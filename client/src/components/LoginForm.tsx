@@ -48,7 +48,7 @@ export function LoginForm() {
   } = useFaceDetection({ enabled: true });
   
   // Fetch stores list
-  const { data: stores } = useQuery({
+  const { data: stores = [] } = useQuery({
     queryKey: ['/api/stores'],
     retry: false,
   });
@@ -132,7 +132,7 @@ export function LoginForm() {
                     <SelectValue placeholder="Select your store" />
                   </SelectTrigger>
                   <SelectContent>
-                    {stores?.map((store: any) => (
+                    {Array.isArray(stores) && stores.map((store: any) => (
                       <SelectItem key={store.id} value={store.id.toString()}>
                         {store.name}
                       </SelectItem>
