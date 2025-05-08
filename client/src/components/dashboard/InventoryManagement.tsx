@@ -42,7 +42,7 @@ export default function InventoryManagement() {
   });
 
   // Fetch brands for filtering
-  const { data: brandsData } = useQuery({
+  const { data: brandsData = [] } = useQuery({
     queryKey: ['/api/brands'],
   });
 
@@ -70,14 +70,16 @@ export default function InventoryManagement() {
 
   // Update inventory when data changes
   useEffect(() => {
-    if (data) {
-      setInventory(data);
+    if (data && Array.isArray(data)) {
+      setInventory(data as InventoryItem[]);
     }
   }, [data]);
 
   // Filter inventory by selected brand
   const filteredInventory = inventory.filter((item) => {
     if (selectedBrand === 'all') return true;
+    // Check if product and brandId exist before comparing
+    if (!item.product || typeof item.product.brandId !== 'number') return false;
     return item.product.brandId === selectedBrand;
   });
 
@@ -167,7 +169,7 @@ export default function InventoryManagement() {
           >
             All Brands
           </button>
-          {brandsData && brandsData.map((brand: Brand) => (
+          {Array.isArray(brandsData) && brandsData.map((brand: Brand) => (
             <button 
               key={brand.id}
               className={`px-4 py-2 rounded-md text-sm font-medium ${
@@ -210,7 +212,9 @@ export default function InventoryManagement() {
                       <div className="text-sm font-medium text-neutral-800">{item.product.name}</div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm text-neutral-700">{item.product.brand?.name}</div>
+                      <div className="text-sm text-neutral-700">
+                        {item.product.brand ? item.product.brand.name : 'Unknown Brand'}
+                      </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <input 
