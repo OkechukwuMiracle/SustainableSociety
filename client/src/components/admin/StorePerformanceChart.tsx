@@ -37,19 +37,19 @@ export default function StorePerformanceChart() {
   const { isAuthenticated } = useAuth();
   
   // Fetch stores data
-  const { data: storesData } = useQuery({
+  const { data: storesData = [] } = useQuery<any[]>({
     queryKey: ['/api/admin/stores'],
     enabled: isAuthenticated,
   });
   
   // Fetch attendance data
-  const { data: attendanceData } = useQuery({
+  const { data: attendanceData = [] } = useQuery<any[]>({
     queryKey: ['/api/admin/attendance'],
     enabled: isAuthenticated,
   });
 
   // Fetch targets data
-  const { data: targetsData } = useQuery({
+  const { data: targetsData = [] } = useQuery<any[]>({
     queryKey: ['/api/admin/targets'],
     enabled: isAuthenticated,
   });
