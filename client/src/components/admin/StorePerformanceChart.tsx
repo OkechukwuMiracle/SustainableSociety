@@ -423,7 +423,7 @@ export default function StorePerformanceChart() {
     return (
       <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 overflow-hidden">
         <div className="p-5 border-b border-neutral-200">
-          <h3 className="text-lg font-semibold text-neutral-800">Store Performance</h3>
+          <h3 className="text-lg font-semibold text-neutral-800">BA Performance</h3>
         </div>
         <div className="p-5">
           <div className="h-80 flex items-center justify-center bg-neutral-50 rounded-lg">
@@ -440,7 +440,7 @@ export default function StorePerformanceChart() {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 overflow-hidden">
       <div className="p-5 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h3 className="text-lg font-semibold text-neutral-800">Store Performance</h3>
+        <h3 className="text-lg font-semibold text-neutral-800">BA Performance</h3>
         
         <div className="flex items-center space-x-2">
           <Select

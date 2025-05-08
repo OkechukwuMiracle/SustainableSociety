@@ -11,7 +11,7 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           href="#overview"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'overview'
-              ? 'bg-primary bg-opacity-10 text-primary'
+              ? 'bg-primary bg-opacity-10 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
           onClick={(e) => {
@@ -28,7 +28,7 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           href="#stores"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'stores'
-              ? 'bg-primary bg-opacity-10 text-primary'
+              ? 'bg-primary bg-opacity-10 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
           onClick={(e) => {
@@ -45,7 +45,7 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           href="#staff"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'staff'
-              ? 'bg-primary bg-opacity-10 text-primary'
+              ? 'bg-primary bg-opacity-10 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
           onClick={(e) => {
@@ -62,7 +62,7 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           href="#reports"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'reports'
-              ? 'bg-primary bg-opacity-10 text-primary'
+              ? 'bg-primary bg-opacity-10 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
           onClick={(e) => {
@@ -79,7 +79,7 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           href="#settings"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'settings'
-              ? 'bg-primary bg-opacity-10 text-primary'
+              ? 'bg-primary bg-opacity-10 text-white'
               : 'text-neutral-700 hover:bg-neutral-100'
           }`}
           onClick={(e) => {
