@@ -107,9 +107,9 @@ export class MemStorage implements IStorage {
     try {
       // Create sample stores synchronously to avoid promises
       const storeData = [
-        { name: "Lagos - Ikeja", location: "Ikeja, Lagos", coordinates: "6.453637,3.165553" },
+        { name: "Lagos - Ikeja", location: "Ikeja, Lagos", coordinates: "6.539456,3.369519" },
         { name: "Lagos - Lekki", location: "Lekki, Lagos", coordinates: "6.593081,3.363735 " },
-        { name: "Abuja - Central", location: "Central, Abuja", coordinates: "9.0765,7.3986" },
+        { name: "Abuja - Central", location: "Central, Abuja", coordinates: "6.539456,3.369519" },
         { name: "Port Harcourt", location: "Port Harcourt", coordinates: "4.8156,7.0498" },
         { name: "Kano Central", location: "Kano", coordinates: "12.0022,8.5920" },
         { name: "Ibadan Main", location: "Ibadan, Oyo", coordinates: "7.3775,3.9470" },

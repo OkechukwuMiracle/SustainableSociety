@@ -42,41 +42,48 @@ export default function AdminDashboard() {
           </>
         );
       case 'stores':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
-            <h3 className="text-lg font-semibold text-neutral-800 mb-4">Stores Management</h3>
-            {/* Stores management content would go here */}
-            <p className="text-neutral-600">Store management functionality</p>
-          </div>
-        );
+        return <StorePerformanceChart />;
+
+          // <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
+          //   <h3 className="text-lg font-semibold text-neutral-800 mb-4">Stores Management</h3>
+          //   {/* Stores management content would go here */}
+          //   <p className="text-neutral-600">Store management functionality</p>
+          // </div>
+    
       case 'staff':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
-            <h3 className="text-lg font-semibold text-neutral-800 mb-4">Staff Management</h3>
-            {/* Staff management content would go here */}
-            <p className="text-neutral-600">Staff management functionality</p>
-          </div>
-        );
-      case 'reports':
-        return (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
-            <h3 className="text-lg font-semibold text-neutral-800 mb-4">Reports</h3>
-            {/* Reports content would go here */}
-            <p className="text-neutral-600">Reports functionality</p>
-          </div>
-        );
-      default:
-        return (
-          <>
-            <SummaryCards summaryData={summaryData} />
-            <StorePerformanceChart />
-            <AttendanceLog 
-              attendanceData={attendanceData} 
+        return <SummaryCards />;
+        // (
+        //   <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
+        //     <h3 className="text-lg font-semibold text-neutral-800 mb-4">Staff Management</h3>
+        //     {/* Staff management content would go here */}
+        //     <p className="text-neutral-600">Staff management functionality</p>
+        //   </div>
+        // );
+       default: 
+        return <AttendanceLog 
+            attendanceData={attendanceData} 
               dateFilter={dateFilter} 
-              setDateFilter={setDateFilter} 
-            />
-          </>
-        );
+              setDateFilter={setDateFilter}
+        />
+        //  (
+        //   <div className="bg-white rounded-lg shadow-sm border border-neutral-200 mb-6 p-5">
+        //     <h3 className="text-lg font-semibold text-neutral-800 mb-4">Reports</h3>
+        //     {/* Reports content would go here */}
+        //     <p className="text-neutral-600">Reports functionality</p>
+        //   </div>
+        // );
+  //     default:
+  //       return (
+  //         <>
+  //           <SummaryCards summaryData={summaryData} />
+  //           <StorePerformanceChart />
+  //           <AttendanceLog 
+  //             attendanceData={attendanceData} 
+  //             dateFilter={dateFilter} 
+  //             setDateFilter={setDateFilter} 
+  //           />
+  //         </>
+  //       );
     }
   };
   

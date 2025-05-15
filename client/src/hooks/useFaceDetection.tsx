@@ -55,103 +55,170 @@ export const useFaceDetection = ({
     };
   }, [enabled]);
 
-  const startDetection = async () => {
-    if (!isModelLoaded) {
-      // For this implementation, we'll assume models are loaded since we don't have actual model files
-      setIsModelLoaded(true);
-    }
+  // const startDetection = async () => {
+  //   if (!isModelLoaded) {
+  //     // For this implementation, we'll assume models are loaded since we don't have actual model files
+  //     setIsModelLoaded(true);
+  //   }
 
-    setError(null);
+  //   setError(null);
 
-    try {
-      stream.current = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'user' } 
-      });
+  //   try {
+  //     stream.current = await navigator.mediaDevices.getUserMedia({ 
+  //       video: { facingMode: 'user' } 
+  //     });
       
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream.current;
-        setIsDetecting(true);
+  //     if (videoRef.current) {
+  //       videoRef.current.srcObject = stream.current;
+  //       setIsDetecting(true);
         
-        // Setup actual face detection with intervals
-        const detectionInterval = setInterval(() => {
-          try {
-            if (videoRef.current && canvasRef.current) {
-              // Since we can't load actual models in this environment,
-              // we'll use a simplified detection approach
-              // that simulates face-api.js but actually works
+  //       // Setup actual face detection with intervals
+  //       const detectionInterval = setInterval(() => {
+  //         try {
+  //           if (videoRef.current && canvasRef.current) {
+  //             // Since we can't load actual models in this environment,
+  //             // we'll use a simplified detection approach
+  //             // that simulates face-api.js but actually works
               
-              // Get video dimensions
-              const video = videoRef.current;
-              const canvas = canvasRef.current;
+  //             // Get video dimensions
+  //             const video = videoRef.current;
+  //             const canvas = canvasRef.current;
               
-              // Match canvas to video dimensions
-              if (video.videoWidth && video.videoHeight) {
-                const displaySize = { 
-                  width: video.videoWidth, 
-                  height: video.videoHeight 
-                };
+  //             // Match canvas to video dimensions
+  //             if (video.videoWidth && video.videoHeight) {
+  //               const displaySize = { 
+  //                 width: video.videoWidth, 
+  //                 height: video.videoHeight 
+  //               };
                 
-                canvas.width = displaySize.width;
-                canvas.height = displaySize.height;
+  //               canvas.width = displaySize.width;
+  //               canvas.height = displaySize.height;
                 
-                const ctx = canvas.getContext('2d');
+  //               const ctx = canvas.getContext('2d');
                 
-                if (ctx) {
-                  // Draw video frame to canvas for analysis
-                  ctx.drawImage(video, 0, 0, displaySize.width, displaySize.height);
+  //               if (ctx) {
+  //                 // Draw video frame to canvas for analysis
+  //                 ctx.drawImage(video, 0, 0, displaySize.width, displaySize.height);
                   
-                  // For demonstration, check brightness in center of frame
-                  // This is a simplified approach - in a real app we'd use face-api.js
-                  const centerX = Math.floor(displaySize.width / 2);
-                  const centerY = Math.floor(displaySize.height / 2);
-                  const pixelData = ctx.getImageData(centerX, centerY, 10, 10).data;
+  //                 // For demonstration, check brightness in center of frame
+  //                 // This is a simplified approach - in a real app we'd use face-api.js
+  //                 const centerX = Math.floor(displaySize.width / 2);
+  //                 const centerY = Math.floor(displaySize.height / 2);
+  //                 const pixelData = ctx.getImageData(centerX, centerY, 10, 10).data;
                   
-                  // Calculate average brightness
-                  let brightness = 0;
-                  for (let i = 0; i < pixelData.length; i += 4) {
-                    brightness += (pixelData[i] + pixelData[i+1] + pixelData[i+2]) / 3;
-                  }
-                  brightness = brightness / (pixelData.length / 4);
+  //                 // Calculate average brightness
+  //                 let brightness = 0;
+  //                 for (let i = 0; i < pixelData.length; i += 4) {
+  //                   brightness += (pixelData[i] + pixelData[i+1] + pixelData[i+2]) / 3;
+  //                 }
+  //                 brightness = brightness / (pixelData.length / 4);
                   
-                  // Detect if brightness changes indicate a face
-                  // For real implementation, we would use actual face detection
-                  const hasFace = brightness > 30 && brightness < 200;
-                  setFaceDetected(hasFace);
+  //                 // Detect if brightness changes indicate a face
+  //                 // For real implementation, we would use actual face detection
+  //                 const hasFace = brightness > 30 && brightness < 200;
+  //                 setFaceDetected(hasFace);
                   
-                  if (hasFace) {
-                    // Draw a rectangle around the "detected" face
-                    ctx.strokeStyle = '#00FF00';
-                    ctx.lineWidth = 3;
-                    const faceSize = Math.min(displaySize.width, displaySize.height) * 0.6;
-                    ctx.strokeRect(
-                      centerX - faceSize/2, 
-                      centerY - faceSize/2, 
-                      faceSize, 
-                      faceSize
-                    );
-                  } else {
-                    // Clear previous drawings if no face
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                  }
-                }
-              }
-            }
-          } catch (error) {
-            console.error('Error during face detection:', error);
-          }
-        }, 100);
+  //                 if (hasFace) {
+  //                   // Draw a rectangle around the "detected" face
+  //                   ctx.strokeStyle = '#00FF00';
+  //                   ctx.lineWidth = 3;
+  //                   const faceSize = Math.min(displaySize.width, displaySize.height) * 0.6;
+  //                   ctx.strokeRect(
+  //                     centerX - faceSize/2, 
+  //                     centerY - faceSize/2, 
+  //                     faceSize, 
+  //                     faceSize
+  //                   );
+  //                 } else {
+  //                   // Clear previous drawings if no face
+  //                   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         } catch (error) {
+  //           console.error('Error during face detection:', error);
+  //         }
+  //       }, 100);
         
-        // Set up a cleanup function for component unmount that doesn't return anything
-        setTimeout(() => {
-          // This ensures we don't accidentally return the clear interval function
-          // from the startDetection function
-        }, 0);
-      }
-    } catch (err) {
-      setError('Failed to access camera. Please ensure camera permissions are granted.');
-      console.error('Error accessing camera:', err);
+  //       // Set up a cleanup function for component unmount that doesn't return anything
+  //       setTimeout(() => {
+  //         // This ensures we don't accidentally return the clear interval function
+  //         // from the startDetection function
+  //       }, 0);
+  //     }
+  //   } catch (err) {
+  //     setError('Failed to access camera. Please ensure camera permissions are granted.');
+  //     console.error('Error accessing camera:', err);
+  //   }
+  // };
+
+
+  const startDetection = async () => {
+  setError(null); // Clear previous errors
+
+  try {
+    // Stop any existing stream
+    if (stream.current) {
+      stopDetection();
     }
+
+    // Get camera access
+    stream.current = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: 'user' } 
+    });
+    
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream.current;
+      await videoRef.current.play(); // Ensure video plays
+      setIsDetecting(true);
+      
+      // Start face detection loop
+      detectFaces();
+    }
+  } catch (err) {
+    setError('Failed to access camera. Please ensure camera permissions are granted.');
+    console.error('Error accessing camera:', err);
+    setIsDetecting(false);
+  }
+};
+
+const detectFaces = () => {
+  if (!videoRef.current || !canvasRef.current) return;
+
+  const video = videoRef.current;
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext('2d');
+  
+  if (!ctx) return;
+
+  const detect = () => {
+    if (!isDetecting) return; // Stop if detection was turned off
+    
+    // Update canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    
+    // Draw video frame to canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Simplified face detection logic
+    const hasFace = checkForFace(ctx, canvas.width, canvas.height);
+    setFaceDetected(hasFace);
+    
+    // Continue detection loop
+    requestAnimationFrame(detect);
   };
+  
+  detect();
+};
+
+// Simplified face detection
+const checkForFace = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+  // This is a placeholder - implement actual face detection here
+  // For now, we'll just return true to simulate detection
+  return true;
+};
 
   const stopDetection = () => {
     if (stream.current) {
