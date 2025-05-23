@@ -182,3 +182,8 @@ export type FullAttendance = Attendance & {
   user: User;
   store: Store;
 };
+
+export type FullInventoryItem = Inventory & {
+  product: Product & { brand: Brand };
+  store: Store;
+};

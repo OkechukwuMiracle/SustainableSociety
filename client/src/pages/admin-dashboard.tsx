@@ -5,6 +5,7 @@ import AdminSidebar from '@/components/layout/AdminSidebar';
 import SummaryCards from '@/components/admin/SummaryCards';
 import StorePerformanceChart from '@/components/admin/StorePerformanceChart';
 import AttendanceLog from '@/components/admin/AttendanceLog';
+import StorePerformance from '@/components/admin/StorePerformance'; // Import the new component
 import { formatDate } from '@/lib/utils';
 
 export default function AdminDashboard() {
@@ -41,6 +42,9 @@ export default function AdminDashboard() {
             />
           </>
         );
+      case 'storePerformance':
+        return <StorePerformance />;
+
       case 'stores':
         return <StorePerformanceChart />;
 

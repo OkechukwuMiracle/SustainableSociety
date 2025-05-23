@@ -372,7 +372,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const stores = await storage.getStores();
       const allTargets = [];
       
-      // Get targets for each store
+       // Get targets for each store
       for (const store of stores) {
         const storeTargets = await storage.getTargetsByStoreId(store.id);
         allTargets.push(...storeTargets);
@@ -410,6 +410,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: error.message });
     }
   });
+
+
+  app.get('/api/admin/inventory', requireAdmin, async (req, res) => {
+  try {
+    const inventory = await storage.getAllInventory();
+    res.json(inventory);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
   return httpServer;
 }

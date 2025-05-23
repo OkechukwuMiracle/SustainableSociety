@@ -63,6 +63,7 @@ export interface IStorage {
   getInventoryByStoreId(storeId: number): Promise<(Inventory & { product: Product & { brand: Brand } })[]>;
   getInventoryByProductId(productId: number): Promise<Inventory[]>;
   getStoreWithProducts(storeId: number): Promise<StoreWithProducts | undefined>;
+  getAllInventory(): Promise<(Inventory & { product: Product & { brand: Brand }, store: Store })[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -591,6 +592,30 @@ export class MemStorage implements IStorage {
       } as StoreWithProducts;
     }
   }
+
+  async getAllInventory(): Promise<(Inventory & { product: Product & { brand: Brand }, store: Store })[]> {
+  return Promise.all(
+    Array.from(this.inventory.values()).map(async (item) => {
+      const product = this.products.get(item.productId);
+      if (!product) throw new Error(`Product with ID ${item.productId} not found`);
+      
+      const brand = this.brands.get(product.brandId);
+      if (!brand) throw new Error(`Brand with ID ${product.brandId} not found`);
+      
+      const store = this.stores.get(item.storeId);
+      if (!store) throw new Error(`Store with ID ${item.storeId} not found`);
+      
+      return {
+        ...item,
+        product: {
+          ...product,
+          brand
+        },
+        store
+      };
+    })
+  );
+}
 }
 
 export const storage = new MemStorage();

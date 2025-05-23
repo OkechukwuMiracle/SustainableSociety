@@ -59,6 +59,23 @@ export default function AdminSidebar({ activeSection, setActiveSection }: AdminS
           <span className="hidden md:inline text-sm">Ba Performance</span>
         </a>
         <a
+          href="#storePerformance"
+          className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
+            activeSection === 'storePerformance'
+              ? 'bg-primary bg-opacity-10 text-white'
+              : 'text-neutral-700 hover:bg-neutral-100'
+          }`}
+          onClick={(e) => {
+            e.preventDefault();
+            setActiveSection('storePerformance');
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H7a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <span className="hidden md:inline text-sm">Store Performance</span>
+        </a>
+        <a
           href="#reports"
           className={`flex items-center space-x-3 px-3 py-2 rounded-md ${
             activeSection === 'reports'

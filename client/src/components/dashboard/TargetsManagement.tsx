@@ -47,6 +47,7 @@ export default function TargetsManagement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/current'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/targets'] }); // Added to refresh StorePerformanceChart
       toast({
         title: 'Target Updated',
         description: 'Your target has been successfully updated.',
