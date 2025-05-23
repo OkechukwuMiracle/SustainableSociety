@@ -30,4 +30,9 @@ export default defineConfig({
      outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
   },
+   server: {
+    proxy: {
+      '/api': 'http://localhost:5000'
+    }
+  },
 });

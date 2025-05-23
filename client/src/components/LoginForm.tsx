@@ -44,7 +44,7 @@ export function LoginForm() {
   
   // Fetch stores list
   const { data: stores = [] } = useQuery({
-    queryKey: ['http://localhost:5000/api/stores'],
+    queryKey: ['/api/stores'],
     retry: false,
   });
   
