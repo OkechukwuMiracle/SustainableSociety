@@ -124,7 +124,7 @@ const StorePerformance = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 text-center">
                   {item.closingStock !== null && item.closingStock !== undefined ? item.closingStock : 'N/A'}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700 text-center">
+                <td className="px-6 py-4.1 whitespace-nowrap text-sm text-neutral-700 text-center">
                   {item.closingStock !== null && item.closingStock !== undefined && item.openingStock > 0 ? (
                     (() => {
                       const percentage = (item.closingStock / item.openingStock) * 100;
