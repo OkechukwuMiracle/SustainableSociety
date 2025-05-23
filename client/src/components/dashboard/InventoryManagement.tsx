@@ -240,14 +240,6 @@ export default function InventoryManagement() {
       <div className="p-5">
         {/* Brand Filter */}
         <div className="mb-4 flex flex-wrap gap-2">
-          {/* <button 
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
-              selectedBrandId === 'all' ? 'bg-primary text-white' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            onClick={() => handleBrandSelect('all')}
-          >
-            All Brands
-          </button> */}
           {Array.isArray(brandsData) && brandsData.map((brand: Brand) => (
             <button 
               key={brand.id}
@@ -379,7 +371,7 @@ export default function InventoryManagement() {
         {finalDisplayedInventory.length > 0 && (
           <div className="mt-4 flex justify-end">
             <button 
-              className="px-4 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-3 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleSaveInventory}
               disabled={updateInventoryMutation.isPending}
             >
