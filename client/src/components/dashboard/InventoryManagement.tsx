@@ -348,7 +348,7 @@ export default function InventoryManagement() {
                             colorClass = 'bg-green-100 text-green-800';
                             statusText = 'Good';
                           } else if (percentage >= 40) {
-                            colorClass = 'bg-yellow-100 text-yellow-800';
+                            colorClass = 'bg-yellow-200 text-yellow-800';
                             statusText = 'Low';
                           } else {
                             colorClass = 'bg-red-100 text-red-800';
