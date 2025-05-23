@@ -79,7 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const distance = calculateDistance(storeLat, storeLng, userLat, userLng);
     
     // Allow if within 500 meters of the store
-    return distance <= 100000;
+    return distance <= 2000;
   };
 
   // API Routes

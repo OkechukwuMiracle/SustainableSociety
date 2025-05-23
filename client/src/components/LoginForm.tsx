@@ -43,10 +43,27 @@ export function LoginForm() {
   }, [isAuthenticated, isAdmin, setLocation]);
   
   // Fetch stores list
-  const { data: stores = [] } = useQuery({
-    queryKey: ['/api/stores'],
-    retry: false,
-  });
+  // const { data: stores = [] } = useQuery({
+  //   queryKey: ['/api/stores'],
+  //   retry: false,
+  // });
+
+  const [storesLoaded, setStoresLoaded] = useState(false);
+const { data: stores = [], refetch: fetchStores } = useQuery({
+  queryKey: ['/api/stores'],
+  retry: false,
+  enabled: false,
+});
+
+const handleStoreSelectOpen = async () => {
+  if (!storesLoaded) {
+    try {
+      await fetchStores();
+      setStoresLoaded(true);
+    } catch (error) {
+      console.error('Failed to fetch stores:', error);
+    }
+  }
   
   // Set up face detection
   useEffect(() => {
@@ -209,6 +226,9 @@ export function LoginForm() {
               <FormLabel>Store Location</FormLabel>
               <FormControl>
                 <Select 
+                onOpenChange={(open) => {
+    if (open) handleStoreSelectOpen();
+  }}
                   onValueChange={field.onChange} 
                   defaultValue={field.value}
                 >
