@@ -49,21 +49,38 @@ export function LoginForm() {
   // });
 
   const [storesLoaded, setStoresLoaded] = useState(false);
-const { data: stores = [], refetch: fetchStores } = useQuery({
+  const [storesError, setStoresError] = useState<string | null>(null);
+
+const { data: stores = [], refetch: fetchStores, isLoading: storesLoading  } = useQuery({
   queryKey: ['/api/stores'],
   retry: false,
   enabled: false,
 });
 
-const handleStoreSelectOpen = async () => {
-  if (!storesLoaded) {
-    try {
-      await fetchStores();
+// const handleStoreSelectOpen = async () => {
+//   if (!storesLoaded) {
+//     try {
+//       await fetchStores();
+//       setStoresLoaded(true);
+//     } catch (error) {
+//       console.error('Failed to fetch stores:', error);
+//     }
+//   }
+const handleStoreSelectOpen = async (isOpen: boolean) => {
+  if (!isOpen || storesLoaded || storesLoading) return;
+  
+  try {
+    setStoresError(null);
+    const result = await fetchStores();
+    
+    if (result.data) {
       setStoresLoaded(true);
-    } catch (error) {
-      console.error('Failed to fetch stores:', error);
     }
+  } catch (error: any) {
+    console.error('Failed to fetch stores:', error);
+    setStoresError('Failed to load stores. Please try again.');
   }
+};
   
   // Set up face detection
   useEffect(() => {
@@ -217,8 +234,104 @@ const handleStoreSelectOpen = async () => {
             </FormItem>
           )}
         />
-        
+
         <FormField
+  control={form.control}
+  name="storeId"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Store Location</FormLabel>
+      <FormControl>
+        <Select 
+          onOpenChange={handleStoreSelectOpen} // Load stores when dropdown opens
+          onValueChange={field.onChange} 
+          defaultValue={field.value}
+          disabled={storesLoading}
+        >
+          <SelectTrigger>
+            <SelectValue 
+              placeholder={
+                storesLoading 
+                  ? "Loading stores..." 
+                  : "Select your store"
+              } 
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {Array.isArray(stores) && stores.length > 0 ? (
+              stores.map((store: any) => (
+                <SelectItem key={store.id} value={store.id.toString()}>
+                  {store.name}
+                </SelectItem>
+              ))
+            ) : !storesLoading ? (
+              <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                No stores available
+              </div>
+            ) : null}
+          </SelectContent>
+        </Select>
+      </FormControl>
+      {storesError && (
+        <p className="text-xs text-red-500 mt-1">{storesError}</p>
+      )}
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+
+{/* 
+        <FormField
+  control={form.control}
+  name="storeId"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Store Location</FormLabel>
+      <FormControl>
+        <Select 
+          onOpenChange={handleStoreSelectOpen} // Load stores when dropdown opens
+          onValueChange={field.onChange} 
+          defaultValue={field.value}
+          disabled={storesLoading}
+        >
+          <SelectTrigger>
+            <SelectValue 
+              placeholder={
+                storesLoading 
+                  ? "Loading stores..." 
+                  : "Select your store"
+              } 
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {storesLoading ? (
+              <SelectItem value="" disabled>
+                Loading stores...
+              </SelectItem>
+            ) : Array.isArray(stores) && stores.length > 0 ? (
+              stores.map((store: any) => (
+                <SelectItem key={store.id} value={store.id.toString()}>
+                  {store.name}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="" disabled>
+                No stores available
+              </SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      </FormControl>
+      {storesError && (
+        <p className="text-xs text-red-500 mt-1">{storesError}</p>
+      )}
+      <FormMessage />
+    </FormItem>
+  )}
+/> */}
+        
+        {/* <FormField
           control={form.control}
           name="storeId"
           render={({ field }) => (
@@ -226,11 +339,13 @@ const handleStoreSelectOpen = async () => {
               <FormLabel>Store Location</FormLabel>
               <FormControl>
                 <Select 
-                onOpenChange={(open) => {
-    if (open) handleStoreSelectOpen();
-  }}
+                //             onOpenChange={(open) => {
+                // if (open) handleStoreSelectOpen();
+                // }}
+                  onOpenChange={handleStoreSelectOpen} // Load stores when dropdown opens
                   onValueChange={field.onChange} 
                   defaultValue={field.value}
+                  disabled={storesLoading}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select your store" />
@@ -247,7 +362,7 @@ const handleStoreSelectOpen = async () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         
         <div className="space-y-2">
           <p className="block text-sm font-medium text-neutral-700">Face Verification</p>
