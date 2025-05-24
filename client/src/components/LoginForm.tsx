@@ -71,6 +71,28 @@ const { data: stores = [], refetch: fetchStores, isLoading: storesLoading  } = u
 //       console.error('Failed to fetch stores:', error);
 //     }
 //   }
+
+// Fetch stores when component mounts or when needed
+useEffect(() => {
+  const loadStores = async () => {
+    if (storesLoaded) return; // Don't fetch if already loaded
+    
+    try {
+      setStoresError(null);
+      const result = await fetchStores();
+      
+      if (result.data) {
+        setStoresLoaded(true);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch stores:', error);
+      setStoresError('Failed to load stores. Please refresh the page and try again.');
+    }
+  };
+
+  // Load stores when component mounts
+  loadStores();
+}, [fetchStores, storesLoaded]);
 const handleStoreSelectOpen = async (isOpen: boolean) => {
   if (!isOpen || storesLoaded || storesLoading) return;
   
