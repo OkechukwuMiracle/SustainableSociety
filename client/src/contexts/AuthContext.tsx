@@ -51,30 +51,68 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = async () => {
-      try {
-        const res = await fetch('/api/user/current', {
-          credentials: 'include'
-        });
+  // useEffect(() => {
+  //   // Check if user is already logged in
+  //   const checkAuth = async () => {
+  //     try {
+  //       const res = await fetch('/api/user/current', {
+  //         credentials: 'include'
+  //       });
 
-        if (res.ok) {
+  //       if (res.ok) {
+  //         const data = await res.json();
+  //         setUser(data.user);
+  //         setStore(data.store);
+  //         setIsAuthenticated(true);
+  //         setIsAdmin(data.user.isAdmin);
+  //       }
+  //     } catch (error) {
+  //       console.error('Auth check failed:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   checkAuth();
+  // }, []);
+
+
+
+  // Updated checkAuth function in AuthContext.tsx
+useEffect(() => {
+  // Check if user is already logged in
+  const checkAuth = async () => {
+    try {
+      const res = await fetch('/api/user/current', {
+        credentials: 'include'
+      });
+
+      if (res.ok) {
+        // Check if the response is actually JSON
+        const contentType = res.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
           const data = await res.json();
           setUser(data.user);
           setStore(data.store);
           setIsAuthenticated(true);
           setIsAdmin(data.user.isAdmin);
+        } else {
+          console.error('Expected JSON response but got:', contentType);
         }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-      } finally {
-        setLoading(false);
+      } else {
+        // Log the response for debugging
+        const text = await res.text();
+        console.error('Auth check failed with status:', res.status, 'Response:', text);
       }
-    };
+    } catch (error) {
+      console.error('Auth check failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    checkAuth();
-  }, []);
+  checkAuth();
+}, []);
 
   const login = async (
     phone: string, 
