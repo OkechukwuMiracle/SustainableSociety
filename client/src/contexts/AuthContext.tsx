@@ -177,7 +177,7 @@ useEffect(() => {
   const adminLogin = async (phone: string, password: string) => {
     setLoading(true);
     try {
-      const res = await apiRequest('POST', constructApiUrl('/api/login'), {
+      const res = await apiRequest('POST', constructApiUrl('/api/admin/login'), {
         phone,
         password,
       });
