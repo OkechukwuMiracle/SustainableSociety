@@ -28,12 +28,20 @@ if (allowedOrigins.length === 0) {
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps, curl) or if origin is in the allowed list
-    if (!origin || (allowedOrigins.length > 0 && allowedOrigins.includes(origin))) {
+    // if (!origin || (allowedOrigins.length > 0 && allowedOrigins.includes(origin))) {
+    //   callback(null, true);
+    // } else {
+    //   log(`CORS: Blocked origin - ${origin}. Allowed: ${allowedOrigins.join(', ') || 'NONE (check CLIENT_ORIGINS env var)'}`);
+    //   callback(new Error('Not allowed by CORS'));
+    // }
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      log(`CORS: Blocked origin - ${origin}. Allowed: ${allowedOrigins.join(', ') || 'NONE (check CLIENT_ORIGINS env var)'}`);
       callback(new Error('Not allowed by CORS'));
-    }
+    } 
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Explicitly list allowed methods
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Common headers, add any custom ones your client sends
@@ -43,6 +51,13 @@ app.use(cors({
 }));
 
 app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://bolreckitt.vercel.app');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  console.log('Incoming origin:', req.headers.origin);
+  console.log('Allowed origins:', allowedOrigins);
+  next();
   const start = Date.now();
   const path = req.path;
   let capturedJsonResponse: Record<string, any> | undefined = undefined;
