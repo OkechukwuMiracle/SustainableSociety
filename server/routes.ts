@@ -18,15 +18,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
   // Configure session middleware
+  // app.use(session({
+  //   secret: process.env.SESSION_SECRET || 'reckitt-session-secret',
+  //   resave: false,
+  //   saveUninitialized: false,
+  //   cookie: { 
+  //     secure: process.env.NODE_ENV === 'production', 
+  //     maxAge: 8 * 60 * 60 * 1000 // 8 hours
+  //   }
+  // }));
   app.use(session({
-    secret: process.env.SESSION_SECRET || 'reckitt-session-secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-      secure: process.env.NODE_ENV === 'production', 
-      maxAge: 8 * 60 * 60 * 1000 // 8 hours
-    }
-  }));
+  secret: process.env.SESSION_SECRET || 'reckitt-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: false, // Temporarily set to false for testing
+    httpOnly: true,
+    sameSite: 'lax', // Add this for cross-origin requests
+    maxAge: 8 * 60 * 60 * 1000 // 8 hours
+  }
+}));
 
   // Auth middleware
   const requireAuth = (req: Request, res: Response, next: Function) => {

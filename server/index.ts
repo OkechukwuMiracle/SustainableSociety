@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-   origin: 'https://bolreckitt.vercel.app', // Your client's Vercel domain
+   origin: ['https://bolreckitt.vercel.app', 'http://localhost:5000'],// Your client's Vercel domain
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Explicitly list allowed methods
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Common headers, add any custom ones your client sends
   credentials: true, // Important for sessions/cookies and authorization headers
