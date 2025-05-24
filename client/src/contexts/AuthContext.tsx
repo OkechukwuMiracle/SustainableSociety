@@ -51,6 +51,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
+   // Read the API URL from .env
+  const VITE_API_URL_FROM_ENV = import.meta.env.VITE_API_URL;
+  console.log('Raw VITE_API_URL:', VITE_API_URL_FROM_ENV); // Add this debug line
+console.log('Type:', typeof VITE_API_URL_FROM_ENV); // Add this debug line
+  let apiUrl = '';
+
+  if (typeof VITE_API_URL_FROM_ENV === "string") {
+    apiUrl = VITE_API_URL_FROM_ENV.trim();
+  } else {
+    console.warn(
+      'AuthContext: VITE_API_URL is not defined as a string in your .env file. API calls will use relative paths.'
+    );
+  }
+
+  const constructApiUrl = (path: string): string => {
+    if (!apiUrl) return path; // Fallback to relative path if apiUrl is not set
+    return `${apiUrl}${path}`;
+  };
+
   // useEffect(() => {
   //   // Check if user is already logged in
   //   const checkAuth = async () => {
@@ -83,7 +102,11 @@ useEffect(() => {
   // Check if user is already logged in
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/user/current', {
+      // const res = await fetch('/api/user/current', {
+      //   credentials: 'include'
+      // });
+
+      const res = await fetch(constructApiUrl('/api/user/current'), {
         credentials: 'include'
       });
 
@@ -122,7 +145,7 @@ useEffect(() => {
   ) => {
     setLoading(true);
     try {
-      const res = await apiRequest('POST', '/api/login', {
+      const res = await apiRequest('POST', constructApiUrl('/api/login'), {
         phone,
         storeId,
         coordinates,
@@ -154,7 +177,7 @@ useEffect(() => {
   const adminLogin = async (phone: string, password: string) => {
     setLoading(true);
     try {
-      const res = await apiRequest('POST', '/api/admin/login', {
+      const res = await apiRequest('POST', constructApiUrl('/api/login'), {
         phone,
         password,
       });
@@ -183,7 +206,7 @@ useEffect(() => {
   const logout = async (faceScan?: string) => {
     setLoading(true);
     try {
-      await apiRequest('POST', '/api/logout', { faceScan });
+      await apiRequest('POST', constructApiUrl('/api/logout'), { faceScan });
       setUser(null);
       setStore(null);
       setIsAuthenticated(false);
