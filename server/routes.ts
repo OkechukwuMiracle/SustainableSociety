@@ -27,14 +27,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   //     maxAge: 8 * 60 * 60 * 1000 // 8 hours
   //   }
   // }));
+//   app.use(session({
+//   secret: process.env.SESSION_SECRET || 'reckitt-session-secret',
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: { 
+//     secure: false, // Temporarily set to false for testing
+//     httpOnly: true,
+//     sameSite: 'lax', // Add this for cross-origin requests
+//     maxAge: 8 * 60 * 60 * 1000 // 8 hours
+//   }
+// }));
+
+const sessionSecret = process.env.SESSION_SECRET;
+  if (!sessionSecret) {
+    console.error("FATAL ERROR: SESSION_SECRET environment variable is not set.");
+    if (process.env.NODE_ENV === 'production') {
+      console.error("Application will exit due to missing SESSION_SECRET in production.");
+      process.exit(1); // Critical for production
+    } else {
+      console.warn("Warning: Using a default, insecure session secret for development. Please set SESSION_SECRET in your .env file.");
+    }
+  }
+
   app.use(session({
-  secret: process.env.SESSION_SECRET || 'reckitt-session-secret',
+  // Use the sessionSecret from env, with a fallback for dev if the process didn't exit.
+  secret: sessionSecret || 'reckitt-session-secret',
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false, // Temporarily set to false for testing
+    // secure: true should be used in production when served over HTTPS
+    // process.env.NODE_ENV is automatically set by many hosting providers like Vercel
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'lax', // Add this for cross-origin requests
+    sameSite: 'lax', // Helps mitigate CSRF attacks. Use 'none' if you have specific cross-site iframe needs, but requires secure: true.
     maxAge: 8 * 60 * 60 * 1000 // 8 hours
   }
 }));

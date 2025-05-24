@@ -57,7 +57,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 console.log('Type:', typeof VITE_API_URL_FROM_ENV); // Add this debug line
   let apiUrl = '';
 
-  if (typeof VITE_API_URL_FROM_ENV === "string") {
+  // if (typeof VITE_API_URL_FROM_ENV === "string") {
+    if (typeof VITE_API_URL_FROM_ENV === "string" && VITE_API_URL_FROM_ENV.trim() !== '') {
     apiUrl = VITE_API_URL_FROM_ENV.trim();
   } else {
     console.warn(
